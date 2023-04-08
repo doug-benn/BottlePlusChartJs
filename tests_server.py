@@ -19,18 +19,23 @@ class tests(unittest.TestCase):
         app = TestApp(server.app)
         assert app.get("/error", expect_errors=True).status == "404 Not Found"
 
-    def test_post_data(self):
+    def test_data_set(self):
         app = TestApp(server.app)
 
         data = [
-            {"year": 2010, "count": 10},
-            {"year": 2011, "count": 20},
-            {"year": 2012, "count": 15},
-            {"year": 2013, "count": 25},
-            {"year": 2014, "count": 22},
-            {"year": 2015, "count": 30},
-            {"year": 2016, "count": 28},
+            {"Language": "Python", "Type": "Good", "count": 20},
+            {"Language": "C++", "Type": "Bad", "count": 10},
+            {"Language": "Java", "Type": " Very Good", "count": 5},
+            {"Language": "PHP", "Type": "Very Bad", "count": 2},
+            {"Language": "Javascript", "Type": "Great", "count": 25},
         ]
+
+        assert app.post_json("/demo", data).status == "200 OK"  # fetch a page successfully
+
+    def test_data_update(self):
+        app = TestApp(server.app)
+
+        data = {"Language": "Python", "Type": "Good", "count": 100}
 
         assert app.post_json("/", data).status == "200 OK"  # fetch a page successfully
 
