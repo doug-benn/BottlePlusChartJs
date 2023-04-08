@@ -7,9 +7,9 @@ import server
 
 
 class tests(unittest.TestCase):
-    def index(self):
-        with boddle(params={"name": "Derek"}):
-            assert server.index() == "Hi Derek!"
+    # def index(self):
+    #     with boddle(params={"name": "Derek"}):
+    #         assert server.index() == "Hi Derek!"
 
     def test_index(self):
         app = TestApp(server.app)
@@ -21,7 +21,18 @@ class tests(unittest.TestCase):
 
     def test_post_data(self):
         app = TestApp(server.app)
-        assert app.post("/", dict(id=1, value="value")).status == "200 OK"  # fetch a page successfully
+
+        data = [
+            {"year": 2010, "count": 10},
+            {"year": 2011, "count": 20},
+            {"year": 2012, "count": 15},
+            {"year": 2013, "count": 25},
+            {"year": 2014, "count": 22},
+            {"year": 2015, "count": 30},
+            {"year": 2016, "count": 28},
+        ]
+
+        assert app.post_json("/", data).status == "200 OK"  # fetch a page successfully
 
     # def test_functional_login_logout(self):
     #     app = TestApp(server.app)
