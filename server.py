@@ -23,8 +23,11 @@ def index():
 @app.post("/demo")
 def demo():
     data = request.json
-    with open("data.json", "w", encoding="utf-8") as jsonFile:
-        json.dump(data, jsonFile)
+
+    js_string = """data = {data};"""
+
+    with open("data.js", "w", encoding="utf-8") as jsonFile:
+        jsonFile.write(js_string.format(data=json.dumps(data)))
 
     return
 
@@ -34,8 +37,11 @@ def post_index():
     newData = request.json
     # If the data is "Wrapped" then it will need "unwrapping"
 
-    with open("data.json", "r", encoding="utf-8") as jsonFile:
-        data = json.load(jsonFile)
+    with open("data.js", "r", encoding="utf-8") as jsonFile:
+        data = jsonFile.read()
+        data = data[7:]
+        data = data[:-1]
+        data = json.loads(data)
 
     for x in range(len(data)):
         if data[x]["Language"] == newData["Language"] and data[x]["Type"] == newData["Type"]:
@@ -46,8 +52,10 @@ def post_index():
     if newData:
         data.append(newData)
 
-    with open("data.json", "w", encoding="utf-8") as jsonFile:
-        json.dump(data, jsonFile)
+    js_string = """data = {data};"""
+
+    with open("data.js", "w", encoding="utf-8") as jsonFile:
+        jsonFile.write(js_string.format(data=json.dumps(data)))
 
     return
 
