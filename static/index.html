@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script type="text/javascript" src="/eel.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- <script
+      src="https://code.jquery.com/jquery-3.6.4.min.js"
+      integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
+      crossorigin="anonymous"
+    ></script> -->
+    <!-- <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script> -->
+
+    <!-- <script type="text/javascript" src="data.js"></script> -->
+  </head>
+  <body>
+    <div id="root"></div>
+    <div style="width: 800px"><canvas id="chart"></canvas></div>
+    <script type="text/javascript">
+      async function drawCharts() {
+        data = await eel.send_data()();
+        console.log('Making Chart');
+        myChart = new Chart(document.getElementById('chart'), {
+          type: 'bar',
+          data: {
+            datasets: [
+              {
+                label: 'Example',
+                data: data,
+                backgroundColor: function (context) {
+                  var index = context.dataIndex;
+                  console.log(context.dataset.data[index]);
+                  var value = context.dataset.data[index]?.active;
+                  return value === true ? 'red' : 'green';
+                },
+              },
+            ],
+          },
+          options: {
+            parsing: {
+              xAxisKey: 'Type',
+              yAxisKey: 'count',
+            },
+            events: ['click'],
+          },
+          parsing: false,
+        });
+        reloadData();
+      }
+      drawCharts();
+      async function reloadData() {
+        data = await eel.send_data()();
+        chartData = [...myChart.data.datasets[0].data];
+        if (JSON.stringify(data) != JSON.stringify(chartData)) {
+          console.log('Diff');
+          myChart.data.datasets[0].data = data;
+          myChart.update();
+        }
+        setTimeout(reloadData, 5000);
+      }
+      /*
+      For the ones that need to be constantly updated, find the index and change the dataset - The update the chart
+      */
+    </script>
+  </body>
+</html>
