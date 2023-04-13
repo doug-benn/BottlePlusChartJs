@@ -1,7 +1,7 @@
 [
-  { "Language": "Python", "Type": "Good", "count": 200, "active": false },
+  { "Language": "Python", "Type": "Good", "count": 20, "active": false },
   { "Language": "C++", "Type": "Bad", "count": 10, "active": false },
-  { "Language": "Java", "Type": " Very Good", "count": 5, "active": false },
+  { "Language": "Java", "Type": " Very Good", "count": 5, "active": true },
   { "Language": "PHP", "Type": "Very Bad", "count": 2, "active": true },
   { "Language": "Javascript", "Type": "Great", "count": 25, "active": false }
 ]
