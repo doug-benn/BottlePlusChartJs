@@ -1,6 +1,6 @@
-import json
 import sys
 
+import ujson
 from bottle import Bottle, abort, error, get, post, request, response, run
 from gevent import monkey
 
@@ -22,61 +22,34 @@ def index():
 
 @app.post("/demo")
 def demo():
-    # Javascript file maker
-    # data = request.json
-    # js_string = """data = {data};"""
-    # with open("data.js", "w", encoding="utf-8") as jsonFile:
-    #     jsonFile.write(js_string.format(data=json.dumps(data)))
-    # return
-
     # Json file
     data = request.json
     with open("./static/data.json", "w", encoding="utf-8") as jsonFile:
-        json.dump(data, jsonFile)
+        ujson.dump(data, jsonFile)
 
     return
 
 
 @app.post("/")
 def post_index():
-    # Javascript file maker
-    # newData = request.json
-    # # If the data is "Wrapped" then it will need "unwrapping"
-    # with open("data.js", "r", encoding="utf-8") as jsonFile:
-    #     data = jsonFile.read()
-    #     data = data[7:]
-    #     data = data[:-1]
-    #     data = json.loads(data)
-    # for x in range(len(data)):
-    #     if data[x]["Language"] == newData["Language"] and data[x]["Type"] == newData["Type"]:
-    #         data[x] = newData
-    #         newData = ""
-    #         break
-    # if newData:
-    #     data.append(newData)
-    # js_string = """data = {data};"""
-    # with open("data.js", "w", encoding="utf-8") as jsonFile:
-    #     jsonFile.write(js_string.format(data=json.dumps(data)))
-    # return
-
-    # Json file maker
     newData = request.json
-    # If the data is "Wrapped" then it will need "unwrapping"
+    # If the data is "wrapped" then it will need "unwrapping"
 
     with open("./static/data.json", "r", encoding="utf-8") as jsonFile:
-        data = json.load(jsonFile)
+        data = ujson.load(jsonFile)
 
     for x in range(len(data)):
-        if data[x]["Language"] == newData["Language"] and data[x]["Type"] == newData["Type"]:
-            data[x] = newData
-            newData = ""
-            break
+        if data[x]["Language"] == newData["Language"] and data[x]["Folder"] == newData["Folder"]:
+            if data[x]["FileType"] == newData["FileType"]:
+                data[x] = newData
+                newData = ""
+                break
 
     if newData:
         data.append(newData)
 
     with open("./static/data.json", "w", encoding="utf-8") as jsonFile:
-        json.dump(data, jsonFile)
+        ujson.dump(data, jsonFile)
 
     return
 
@@ -111,3 +84,32 @@ if __name__ == "__main__":
 #     else:
 #         print("Not PINpoint")
 #         return "Unauthorized", 401
+
+
+# Javascript file maker
+# newData = request.json
+# # If the data is "Wrapped" then it will need "unwrapping"
+# with open("data.js", "r", encoding="utf-8") as jsonFile:
+#     data = jsonFile.read()
+#     data = data[7:]
+#     data = data[:-1]
+#     data = json.loads(data)
+# for x in range(len(data)):
+#     if data[x]["Language"] == newData["Language"] and data[x]["Type"] == newData["Type"]:
+#         data[x] = newData
+#         newData = ""
+#         break
+# if newData:
+#     data.append(newData)
+# js_string = """data = {data};"""
+# with open("data.js", "w", encoding="utf-8") as jsonFile:
+#     jsonFile.write(js_string.format(data=json.dumps(data)))
+# return
+
+
+# Javascript file maker
+# data = request.json
+# js_string = """data = {data};"""
+# with open("data.js", "w", encoding="utf-8") as jsonFile:
+#     jsonFile.write(js_string.format(data=json.dumps(data)))
+# return

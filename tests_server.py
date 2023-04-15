@@ -7,10 +7,6 @@ import server
 
 
 class tests(unittest.TestCase):
-    # def index(self):
-    #     with boddle(params={"name": "Derek"}):
-    #         assert server.index() == "Hi Derek!"
-
     def test_index(self):
         app = TestApp(server.app)
         assert app.get("/").status == "200 OK"  # fetch a page successfully
@@ -23,11 +19,9 @@ class tests(unittest.TestCase):
         app = TestApp(server.app)
 
         data = [
-            {"Language": "Python", "Type": "Good", "count": 20},
-            {"Language": "C++", "Type": "Bad", "count": 10},
-            {"Language": "Java", "Type": " Very Good", "count": 5},
-            {"Language": "PHP", "Type": "Very Bad", "count": 2},
-            {"Language": "Javascript", "Type": "Great", "count": 25},
+            {"Language": "Python", "Folder": "Here", "FileType": ".py", "count": 20},
+            {"Language": "C++", "Folder": "There", "FileType": ".cp", "count": 20},
+            {"Language": "Java", "Folder": "Here", "FileType": ".py", "count": 20},
         ]
 
         assert app.post_json("/demo", data).status == "200 OK"  # fetch a page successfully
@@ -35,22 +29,9 @@ class tests(unittest.TestCase):
     def test_data_update(self):
         app = TestApp(server.app)
 
-        data = {"Language": "Python", "Type": "Good", "count": 100}
+        data = ({"Language": "Java", "Folder": "Here", "FileType": ".py", "endDateTime": "2023-04-15T10:45:00"},)
 
         assert app.post_json("/", data).status == "200 OK"  # fetch a page successfully
-
-    # def test_functional_login_logout(self):
-    #     app = TestApp(server.app)
-
-    #     app.post("/login", {"user": "foo", "pass": "bar"})  # log in and get a cookie
-
-    #     assert app.get("/admin").status == "200 OK"  # fetch a page successfully
-
-    #     assert app.get("/logout").status_code == 200  # log out
-    #     app.reset()  # drop the cookie
-
-    #     # fetch the same page, unsuccessfully
-    #     assert app.get("/admin", expect_errors=True).status == "401 Unauthorized"
 
 
 if __name__ == "__main__":

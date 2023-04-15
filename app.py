@@ -1,6 +1,5 @@
-import json
-
 import eel
+import ujson
 
 eel.init("static")
 
@@ -8,7 +7,7 @@ eel.init("static")
 @eel.expose
 def send_data():
     with open("./static/data.json", "r", encoding="utf-8") as jsonFile:
-        data = json.load(jsonFile)
+        data = ujson.load(jsonFile)
     return data
 
 

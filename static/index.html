@@ -20,57 +20,66 @@
     <script type="text/javascript">
       async function drawCharts() {
         data = await eel.send_data()();
+        const pythonFile = data.filter((obj) => obj.FileType == '.py');
+        const cppFile = data.filter((obj) => obj.FileType == '.cp');
+
         myChart = new Chart(document.getElementById('chart'), {
           type: 'bar',
+          options: {
+            scales: { x: { stacked: true }, y: { stacked: true } },
+            events: ['click'],
+            borderColor: '#000000',
+          },
+          //parsing: false,
           data: {
             datasets: [
               {
                 label: 'Example',
-                data: data,
-                borderColor: '#000000',
+                data: pythonFile,
+                parsing: {
+                  xAxisKey: 'Language',
+                  yAxisKey: 'count',
+                },
                 backgroundColor: function (context) {
                   var index = context.dataIndex;
                   var value = context.dataset.data[index]?.active;
                   return value === true ? 'red' : 'green';
                 },
               },
+              {
+                label: 'Example',
+                data: cppFile,
+                parsing: {
+                  xAxisKey: 'Language',
+                  yAxisKey: 'count',
+                },
+                backgroundColor: '#EBCCD1',
+              },
             ],
           },
-          options: {
-            parsing: {
-              xAxisKey: 'Type',
-              yAxisKey: 'count',
-            },
-            events: ['click'],
-          },
-          parsing: false,
         });
-        reloadData();
+        //reloadData();
       }
       drawCharts();
-      async function reloadData() {
-        data = await eel.send_data()();
-        chartData = [...myChart.data.datasets[0].data];
-        // results = chartData.filter((obj1) => !data.some((obj2) => obj2.Language != obj1.Language) || obj1);
-        // var results = chartData.filter(function (o1) {
-        //   // filter out (!) items in result2
-        //   return (
-        //     !data.some(function (o2) {
-        //       return JSON.stringify(o1) != JSON.stringify(o2); // assumes unique id
-        //     }) || o1
-        //   );
-        // });
-        // console.log(results);
-        chartData.filter((obj) => obj.active === true).forEach((obj) => (obj.count += 1));
-        myChart.data.datasets[0].data = chartData;
-        myChart.update();
-        // if (JSON.stringify(data) != JSON.stringify(chartData)) {
-        //   console.log('Diff');
-        //   myChart.data.datasets[0].data = data;
-        //   myChart.update();
-        // }
-        setTimeout(reloadData, 1000);
-      }
+      // async function activeTimer() {
+      //   const allChartData = [...myChart.data.datasets[0].data];
+      //   allChartData.filter((obj) => obj.active === true).forEach((obj) => (obj.count += 1));
+      //   myChart.data.datasets[0].data = allChartData;
+      //   myChart.update();
+      //   setTimeout(activeTimer, 1000);
+      // }
+      // async function reloadData() {
+      //   const newData = await eel.send_data()();
+      //   const chartData = [...myChart.data.datasets[0].data];
+      //   myChart.data.datasets[0].data = newData;
+      //   myChart.update();
+      //   // if (JSON.stringify(data) != JSON.stringify(chartData)) {
+      //   //   console.log('Diff');
+      //   //   myChart.data.datasets[0].data = data;
+      //   //   myChart.update();
+      //   // }
+      //   setTimeout(reloadData, 5000);
+      // }
       /*
       For the ones that need to be constantly updated, find the index and change the dataset - The update the chart
       */
